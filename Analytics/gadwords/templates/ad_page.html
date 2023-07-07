@@ -1,0 +1,264 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+<link href="../static/css/global.css" rel="stylesheet" />
+{% block content %}
+
+<div class="panel-heading">
+    <h4 class="panel-title">Upload File</h4>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="csv_file">
+        <input type="submit" value="Upload">
+    </form>
+</div>
+<h1 class="page-header"> <small></small></h1>
+<!-- END page-header -->
+<!-- BEGIN panel -->
+<div class="panel panel-inverse">
+    <div class="panel-heading">
+        <h4 class="panel-title">Adword Data</h4>
+        <div class="panel-heading-btn">
+            <form id="deleteForm" name='delete' action="{% url 'delete' %}" method="post">
+                {% csrf_token %}
+                <button id="deleteButton" type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div style="overflow-x: auto; overflow-y: auto; max-height: 500px;">
+            <form>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Index</th>
+                                <th>Date</th>
+                                <th>Clicks</th>
+                                <th>Cost</th>
+                                <th>Conversions</th>
+                                <th>Cost per Conversion</th>
+                                <th>Search Word</th>
+                                <th>Search Word Clicks</th>
+                                <th>Search Word Impressions</th>
+                                <th>Search Word Cost</th>
+                                <th>Search Salon</th>
+                                <th>Search Salon Clicks</th>
+                                <th>Search Salon Impressions</th>
+                                <th>Search Salon Cost</th>
+                                <th>Search Keyword</th>
+                                <th>Search Keyword Clicks</th>
+                                <th>Search Keyword CTR</th>
+                                <th>Campaign Name</th>
+                                <th>Optimization Score</th>
+                                <th>Network Name</th>
+                                <th>Network Clicks</th>
+                                <th>Network Cost</th>
+                                <th>Device Name</th>
+                                <th>Device Cost</th>
+                                <th>Device Clicks</th>
+                                <th>Device Conversion</th>
+                                <th>Gender</th>
+                                <th>Age Range</th>
+                                <th>Gender Impression</th>
+                                <th>Per Hour</th>
+                                <th>Per Hour Impression</th>
+                                <th>Per Day</th>
+                                <th>Per Day Per Hour</th>
+                                <th>Per Day Per Hour Impression</th>
+                                <th>Campaigns Cost</th>
+                                <th>Campaigns Conversion</th>
+                                <th>Campaigns Cost per Conversion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in ad_data %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="delete" value="{{ row.id }}">
+                                </td>
+                                <td>{{ ad_data.start_index|add:forloop.counter0 }}</td> <!-- Index number -->
+                                <td>{{ row.date }}</td>
+                                <td>{{ row.clicks }}</td>
+                                <td>{{ row.cost }}</td>
+                                <td>{{ row.conversions }}</td>
+                                <td>{{ row.cost_per_conversion }}</td>
+                                <td>{{ row.search_word }}</td>
+                                <td>{{ row.search_word_clicks }}</td>
+                                <td>{{ row.search_word_impressions }}</td>
+                                <td>{{ row.search_word_cost }}</td>
+                                <td>{{ row.search_salon }}</td>
+                                <td>{{ row.search_salon_clicks }}</td>
+                                <td>{{ row.search_salon_impressions }}</td>
+                                <td>{{ row.search_salon_cost }}</td>
+                                <td>{{ row.search_keyword }}</td>
+                                <td>{{ row.search_keyword_clicks }}</td>
+                                <td>{{ row.search_keyword_ctr }}</td>
+                                <td>{{ row.campaign_name }}</td>
+                                <td>{{ row.optimization_score }}</td>
+                                <td>{{ row.network_name }}</td>
+                                <td>{{ row.network_clicks }}</td>
+                                <td>{{ row.network_cost }}</td>
+                                <td>{{ row.device_name }}</td>
+                                <td>{{ row.device_cost }}</td>
+                                <td>{{ row.device_clicks }}</td>
+                                <td>{{ row.device_conversion }}</td>
+                                <td>{{ row.gender }}</td>
+                                <td>{{ row.age_range }}</td>
+                                <td>{{ row.gender_impression }}</td>
+                                <td>{{ row.per_hour }}</td>
+                                <td>{{ row.per_hour_impression }}</td>
+                                <td>{{ row.per_day }}</td>
+                                <td>{{ row.per_day_per_hour }}</td>
+                                <td>{{ row.per_day_per_hour_impression }}</td>
+                                <td>{{ row.campaigns_cost }}</td>
+                                <td>{{ row.campaigns_conversion }}</td>
+                                <td>{{ row.campaigns_cost_per_conversion }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <div class="text-center">
+            <!-- Pagination links -->
+            {% if ad_data.has_previous %}
+                <a href="?page=1">First</a>
+                <a href="?page={{ ad_data.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span class="current-page">{{ ad_data.number }}</span> /
+            <span class="total-pages">{{ ad_data.paginator.num_pages }}</span>
+            {% if ad_data.has_next %}
+                <a href="?page={{ ad_data.next_page_number }}">Next</a>
+                <a href="?page={{ ad_data.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript code for deleting selected rows
+    document.getElementById('deleteButton').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        var checkboxes = document.getElementsByName('delete');
+        var checkedIds = [];
+
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                checkedIds.push(checkbox.value);
+            }
+        });
+
+        if (checkedIds.length > 0) {
+            if (confirm('Are you sure you want to delete the selected rows?')) {
+                // You can make an AJAX request here to delete the selected rows
+                console.log('Selected row IDs:', checkedIds);
+
+                // Update the form action URL with the selected IDs
+                document.getElementById('deleteForm').action = document.getElementById('deleteForm').action + '?ids=' + checkedIds.join(',');
+
+                // Submit the form
+                document.getElementById('deleteForm').submit();
+            }
+        } else {
+            alert('Please select rows to delete.');
+        }
+    });
+</script>
+
+<style>
+    /* CSS styles remain the same */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        color: #333;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .btn-views,
+    .btn-edit,
+    .btn-delete {
+        padding: 4px 8px;
+        font-size: 12px;
+        line-height: 1;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-views:hover {
+        background-color: #45a049;
+    }
+
+    .btn-edit {
+        background-color: #007bff;
+    }
+
+    .btn-edit:hover {
+        background-color: #0069d9;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+    .panel table thead {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        background-color: #f2f2f2;
+    }
+
+    .panel .panel-heading {
+        position: sticky;
+        top: 50px;
+        z-index: 9999;
+    }
+
+    .panel.panel-expand .panel-heading {
+        top: 0 !important;
+    }
+
+    .panel.panel-expand table thead {
+        top: -16px !important;
+    }
+</style>
+
+{% endblock %}

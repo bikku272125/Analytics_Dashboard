@@ -1,0 +1,19 @@
+.panel .panel-heading {
+  position: sticky;
+  top: 50px;
+  z-index: 999;
+}
+
+#content .panel-body form {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+#content .panel-body form table thead {
+  z-index: 999;
+  background-color: #f2f2f2;
+}
+#content .panel-body form table thead tr th {
+  white-space: nowrap;
+}/*# sourceMappingURL=global.css.map */

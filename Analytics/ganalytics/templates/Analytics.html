@@ -1,0 +1,378 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <div class="panel-heading">
+        <h4 class="panel-title">Upload File</h4>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="myfile">
+            <input type="submit" value="Upload">
+          </form>
+    </div>
+    <h1 class="page-header"> <small></small></h1>
+			<!-- END page-header -->
+			<!-- BEGIN panel -->
+			<div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Analytics Data</h4>
+                    <div class="dropdown me-2">
+        <button class="btn btn-white btn-sm" data-bs-toggle="dropdown">
+            show <span class="caret ms-3px"></span>
+        </button>
+        <div class="dropdown-menu">
+            <a href="/your_view_url/?quantity=all" class="dropdown-item">
+                <i class="fa fa-circle fs-9px fa-fw me-2"></i> All
+            </a>
+            <a href="/your_view_url/?quantity=10" class="dropdown-item">
+                <i class="fa fa-circle fs-9px fa-fw me-2 text-muted"></i> 10
+            </a>
+            <a href="/your_view_url/?quantity=20" class="dropdown-item">
+                <i class="fa fa-circle fs-9px fa-fw me-2 text-blue"></i> 20
+            </a>
+            <!-- Add other options as needed -->
+        </div>
+    </div>
+                    <div class="panel-heading-btn">
+                        <div class="panel-heading-btn">
+                            <form id="deleteForm" name='delete' action="{% url 'delete' %}" method="post">
+                                {% csrf_token %}
+                                <button id="deleteButton" type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form>
+                    <div style="overflow-x: auto; overflow-y: auto; max-height: 500px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Index</th>
+                                <th>Default Channel Grouping</th>
+                                <th>Default Sessions</th>
+                                <th>Default New Users</th>
+                                <th>Browser</th>
+                                <th>Browser Users</th>
+                                <th>Browser New Users</th>
+                                <th>Browser Sessions</th>
+                                <th>Browser Bounce Rate</th>
+                                <th>Browser Pages per Session</th>
+                                <th>Day Index</th>
+                                <th>Day Users</th>
+                                <th>Day Sessions</th>
+                                <th>Day Benchmark Sessions</th>
+                                <th>Device Category</th>
+                                <th>Device Sessions Benchmark Delta</th>
+                                <th>Device Sessions</th>
+                                <th>Device Benchmark Sessions</th>
+                                <th>Device New Sessions Benchmark Delta</th>
+                                <th>Device New Sessions</th>
+                                <th>Device Benchmark New Sessions</th>
+                                <th>Device New Users Benchmark Delta</th>
+                                {% comment %} <th>Device New Users</th> {% endcomment %}
+                                <th>Device Benchmark New Users</th>
+                                <th>Device Pages per Session Benchmark Delta</th>
+                                <th>Device Pages per Session</th>
+                                <th>Device Benchmark Pages per Session</th>
+                                <th>Device Avg Session Duration</th>
+                                <th>Device Avg Benchmark Session Duration</th>
+                                <th>Device Bounce Rate Benchmark Delta</th>
+                                <th>Device Bounce Rate</th>
+                                <th>Device Benchmark Bounce Rate</th>
+                                <th>Device Impressions</th>
+                                <th>Device Clicks</th>
+                                <th>Device CTR</th>
+                                <th>Device Avg. Position</th>
+                                <th>Device 2 Sessions</th>
+                                <th>Device 2 Bounce Rate</th>
+                                <th>Mobile Device Info</th>
+                                <th>Mobile Users</th>
+                                <th>Mobile New Users</th>
+                                <th>Campaign Campaign ID</th>
+                                <th>Campaign Clicks</th>
+                                <th>Campaign Cost</th>
+                                <th>Campaign CPC</th>
+                                <th>Display Keywords</th>
+                                <th>Display Campaign</th>
+                                <th>Display Google Ads Ad Group</th>
+                                <th>Display Clicks</th>
+                                <th>Display Cost</th>
+                                <th>Display CPC</th>
+                                <th>Final URL</th>
+                                <th>Final Clicks</th>
+                                <th>Final Cost</th>
+                                <th>Final CPC</th>
+                                <th>Keyword</th>
+                                <th>Keyword Clicks</th>
+                                <th>Keyword Cost</th>
+                                <th>Keyword CPC</th>
+                                {% comment %} <th>Video Campaign ID</th>
+                                <th>Video Paid Views</th>
+                                <th>Video Cost</th>
+                                <th>Video CPV</th> {% endcomment %}
+                                <th>Affinity Category Reach</th>
+                                <th>Affinity Users</th>
+                                <th>Landing Page</th>
+                                <th>Landing Impressions</th>
+                                <th>Landing Clicks</th>
+                                <th>Landing CTR</th>
+                                <th>Country</th>
+                                <th>Country Users</th>
+                                <th>Country New Users</th>
+                                <th>Page Views</th>
+                                <th>Unique Page Views</th>
+                                <th>Search Query</th>
+                                <th>Search Query Clicks</th>
+                                <th>Search Query Impressions</th>
+                                <th>Search Query CTR</th>
+                                <th>Search Query Avg. Position</th>
+                                <th>Source</th>
+                                <th>Source Users</th>
+                                {% comment %} <th>Source New Users</th> {% endcomment %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in ad_data %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="delete" value="{{ row.id }}">
+                                </td>
+                                <td>{{ ad_data.start_index|add:forloop.counter0 }}</td> <!-- Index number -->
+                                <td>{{ row.default_channel_grouping }}</td>
+                                <td>{{ row.default_sessions }}</td>
+                                <td>{{ row.default_new_users }}</td>
+                                <td>{{ row.browser }}</td>
+                                <td>{{ row.browser_users }}</td>
+                                <td>{{ row.browser_new_users }}</td>
+                                <td>{{ row.browser_sessions }}</td>
+                                <td>{{ row.browser_bounce_rate }}</td>
+                                <td>{{ row.browser_pages_session }}</td>
+                                <td>{{ row.day_index }}</td>
+                                <td>{{ row.day_users }}</td>
+                                <td>{{ row.day_sessions }}</td>
+                                <td>{{ row.day_benchmark_sessions }}</td>
+                                <td>{{ row.device_category }}</td>
+                                <td>{{ row.device_sessions_benchmark_delta }}</td>
+                                <td>{{ row.device_sessions }}</td>
+                                <td>{{ row.device_benchmark_sessions }}</td>
+                                <td>{{ row.device_new_sessions_benchmark_delta }}</td>
+                                <td>{{ row.device_new_sessions }}</td>
+                                <td>{{ row.device_benchmark_new_sessions }}</td>
+                                <td>{{ row.device_new_users_benchmark_delta }}</td>
+                                {% comment %} <td>{{ row.device_new_users }}</td> {% endcomment %}
+                                <td>{{ row.device_benchmark_new_users }}</td>
+                                <td>{{ row.device_pages_session_benchmark_delta }}</td>
+                                <td>{{ row.device_pages_session }}</td>
+                                <td>{{ row.device_benchmark_pages_session }}</td>
+                                <td>{{ row.device_avg_session_duration }}</td>
+                                <td>{{ row.device_avg_benchmark_session_duration }}</td>
+                                <td>{{ row.device_bounce_rate_benchmark_delta }}</td>
+                                <td>{{ row.device_bounce_rate }}</td>
+                                <td>{{ row.device_benchmark_bounce_rate }}</td>
+                                <td>{{ row.device_impressions }}</td>
+                                <td>{{ row.device_clicks }}</td>
+                                <td>{{ row.device_ctr }}</td>
+                                <td>{{ row.device_average_position }}</td>
+                                <td>{{ row.device_2_sessions }}</td>
+                                <td>{{ row.device_2_bounce_rate }}</td>
+                                <td>{{ row.mobile_device_info }}</td>
+                                <td>{{ row.mobile_users }}</td>
+                                <td>{{ row.mobile_new_users }}</td>
+                                <td>{{ row.campaign_campaign_id }}</td>
+                                <td>{{ row.campaign_clicks }}</td>
+                                <td>{{ row.campaign_cost }}</td>
+                                <td>{{ row.campaign_cpc }}</td>
+                                <td>{{ row.display_keywords }}</td>
+                                <td>{{ row.display_campaign }}</td>
+                                <td>{{ row.display_google_ads_ad_group }}</td>
+                                <td>{{ row.display_clicks }}</td>
+                                <td>{{ row.display_cost }}</td>
+                                <td>{{ row.display_cpc }}</td>
+                                <td>{{ row.final_url }}</td>
+                                <td>{{ row.final_clicks }}</td>
+                                <td>{{ row.final_cost }}</td>
+                                <td>{{ row.final_cpc }}</td>
+                                <td>{{ row.keyword }}</td>
+                                <td>{{ row.keyword_clicks }}</td>
+                                <td>{{ row.keyword_cost }}</td>
+                                <td>{{ row.keyword_cpc }}</td>
+                                {% comment %} <td>{{ row.video_campaign_id }}</td>
+                                <td>{{ row.video_paid_views }}</td>
+                                <td>{{ row.video_cost }}</td>
+                                <td>{{ row.video_cpv }}</td> {% endcomment %}
+                                <td>{{ row.affinity_category_reach }}</td>
+                                <td>{{ row.affinity_users }}</td>
+                                <td>{{ row.landing_page }}</td>
+                                <td>{{ row.landing_impressions }}</td>
+                                <td>{{ row.landing_clicks }}</td>
+                                <td>{{ row.landing_ctr }}</td>
+                                <td>{{ row.country }}</td>
+                                <td>{{ row.country_users }}</td>
+                                <td>{{ row.country_new_users }}</td>
+                                <td>{{ row.page_views }}</td>
+                                <td>{{ row.unique_page_views }}</td>
+                                <td>{{ row.search_query }}</td>
+                                <td>{{ row.search_query_clicks }}</td>
+                                <td>{{ row.search_query_impressions }}</td>
+                                <td>{{ row.search_query_ctr }}</td>
+                                <td>{{ row.search_query_avg_position }}</td>
+                                <td>{{ row.source }}</td>
+                                <td>{{ row.source_users }}</td>
+                                {% comment %} <td>{{ row.source_new_users }}</td> {% endcomment %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            </div>
+            
+       
+            <div class="text-center">
+                <!-- Pagination links -->
+                {% if ad_data.has_previous %}
+                    <a href="?page=1">First</a>
+                    <a href="?page={{ ad_data.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span class="current-page">{{ ad_data.number }}</span> /
+                <span class="total-pages">{{ ad_data.paginator.num_pages }}</span>
+                {% if ad_data.has_next %}
+                    <a href="?page={{ ad_data.next_page_number }}">Next</a>
+                    <a href="?page={{ ad_data.paginator.num_pages }}">Last</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript code for deleting selected rows
+        document.getElementById('deleteButton').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the form from submitting
+    
+            var checkboxes = document.getElementsByName('delete');
+            var checkedIds = [];
+    
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    checkedIds.push(checkbox.value);
+                }
+            });
+    
+            if (checkedIds.length > 0) {
+                if (confirm('Are you sure you want to delete the selected rows?')) {
+                    // You can make an AJAX request here to delete the selected rows
+                    console.log('Selected row IDs:', checkedIds);
+    
+                    // Update the form action URL with the selected IDs
+                    document.getElementById('deleteForm').action = document.getElementById('deleteForm').action + '?ids=' + checkedIds.join(',');
+    
+                    // Submit the form
+                    document.getElementById('deleteForm').submit();
+                }
+            } else {
+                alert('Please select rows to delete.');
+            }
+        });
+    </script>
+			
+    
+    <style>
+        /* CSS styles remain the same */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+    
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+    
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+    
+        .btn-views,
+        .btn-edit,
+        .btn-delete {
+            padding: 4px 8px;
+            font-size: 12px;
+            line-height: 1;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    
+        .btn-views:hover {
+            background-color: #45a049;
+        }
+    
+        .btn-edit {
+            background-color: #007bff;
+        }
+    
+        .btn-edit:hover {
+            background-color: #0069d9;
+        }
+    
+        .btn-delete {
+            background-color: #dc3545;
+        }
+    
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+    
+        .panel table thead {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background-color: #f2f2f2;
+        }
+    
+        .panel .panel-heading {
+            position: sticky;
+            top: 50px;
+            z-index: 9999;
+        }
+    
+        .panel.panel-expand .panel-heading {
+            top: 0 !important;
+        }
+    
+        .panel.panel-expand table thead {
+            top: -16px !important;
+        }
+    </style>
+
+
+
+{% endblock content %}

@@ -1,0 +1,257 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+<div class="row">
+	<!-- BEGIN daterange-filter -->
+	<div class="d-sm-flex align-items-center mb-3">
+		<a href="#" class="btn btn-dark me-2 text-truncate" id="daterange-filter">
+			<i class="fa fa-calendar fa-fw text-white text-opacity-50 ms-n1"></i> 
+			<span><p>Date Range: {{ start_date|date:"d M Y" }} - {{ end_date|date:"d M Y" }}</p></span>
+		<b class="caret ms-1 opacity-5"></b>
+		</a>
+		<div class="text-gray-600 fw-bold mt-2 mt-sm-0"><b>compared to <span id="daterange-prev-date">{{ start_date|date:"d M Y" }} - {{ end_date|date:"d M Y" }}</b></span></div>
+		<!-- dropdown -->
+	  <div class="btn-group">
+	  <a href="#" class="btn btn-dark">Dropdown</a>
+	  <a href="#" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
+	  <i class="fa fa-caret-down"></i>
+	  </a>
+	  <ul class="dropdown-menu dropdown-menu-end">
+		<li><a href="{% url 'AdDashboard' %}" class="btn btn-search">Adword</a></li>
+		<li><a href="{% url 'Analytics_Dashboard' %}" class="btn btn-search">Analytics</a></i></li>
+		<li><a href="{% url 'ABD' %}" class="btn btn-search">Artist Bookings</a></i></li>
+		{% comment %} <li><a href="#" class="btn btn-search">Meta</a><i class="fa fa-caret-down"></i></li> {% endcomment %}
+		<li><a href="{% url 'vendor_Booking_Dashboard' %}" class="btn btn-search">Vendor Bookinng</a></i></li>
+		<li><a href="{% url 'Artist_location_dashboard' %}" class="btn btn-search">Artist Location</a></i></li>
+		<li><a href="{% url 'VLD' %}" class="btn btn-search">Vendor Location</a></i></li>
+		
+		
+	  </ul>
+</div>
+	 
+	</div>
+	<!-- END daterange-filter -->
+	
+</div>
+      <div class="row">
+        <!-- BEGIN col-3 -->
+        <div class="col-xl-3 col-md-6">
+            <div class="widget widget-stats bg-blue">
+            
+                <div class="stats-icon"><i class="fa fa-desktop"></i></div>
+                <div class="stats-info">
+                    <h4>Total Click</h4>
+                    <p>{{ total_click }}</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="{{ ad_page }}">View Details<i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- END col-3 -->
+        <!-- BEGIN col-3 -->
+        <div class="col-xl-3 col-md-6">
+            <div class="widget widget-stats bg-info">
+                <div class="stats-icon"><i class="fa fa-link"></i></div>
+                <div class="stats-info">
+                    <h4>Total Cost:</h4>
+                    <p>{{total_cost}}</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="{{ ad_page }}">View Details<i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- END col-3 -->
+        <!-- BEGIN col-3 -->
+        <div class="col-xl-3 col-md-6">
+            <div class="widget widget-stats bg-orange">
+                <div class="stats-icon"><i class="fa fa-users"></i></div>
+                <div class="stats-info">
+                    <h4>Total Conversion:</h4>
+                    <p>{{total_conversion}}</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="{{ ad_page }}"> View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- END col-3 -->
+        <!-- BEGIN col-3 -->
+        <div class="col-xl-3 col-md-6">
+            <div class="widget widget-stats bg-red">
+                <div class="stats-icon"><i class="fa fa-clock"></i></div>
+                <div class="stats-info">
+                    <h4>CPC</h4>
+                    <p>{{ total_cpc }}</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="{{ ad_page }}">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- END col-3 -->
+    </div>
+<div class="col">
+    <div class="row-4">
+        <!-- BEGIN col-8 -->
+            <div class="row-4">
+                <!-- BEGIN panel -->
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Bar Chart</h4>
+                        <div class="panel-heading-btn">
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="myChart" width="400" height="100"></canvas>
+        </div> 
+				</div>
+    <div class="col-6">				
+	
+		<!-- BEGIN panel -->
+		<div class="panel panel-inverse">
+			<div class="panel-heading">
+				<h4 class="panel-title"> Chart</h4>
+				<div class="panel-heading-btn">
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div id="myPlot" style="width:100%;max-width:500px">
+
+			</div>	
+        </div>
+    </div>
+	<div class="row-4">
+		<div class="panel panel-inverse">
+			<div class="panel-heading">
+				<h4 class="panel-title"> Chart</h4>
+				<div class="panel-heading-btn">
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+					<a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div id="myPlot" style="width:100%;max-width:500px">
+
+			</div>	
+        </div>
+	</div>
+</div>
+<div>
+
+    <!-- END row -->
+    
+</div>
+
+     {% comment %} <script src="../static/js/vendor.min.js"></script>
+	<script src="../static/js/app.min.js"></script>  {% endcomment %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+  
+  <script>
+	const ctx = document.getElementById('myChart');
+  
+	new Chart(ctx, {
+	  type: 'line',
+	  data: {
+		labels: [{% for data in data %}'{{ data.cost }}',{% endfor %}],
+		datasets: [{
+		  label: 'Sum of Clicks',
+		  data: [{% for data in data %}{{ data.clicks }},{% endfor %}],
+		  backgroundColor: 'rgba(54, 162, 235, 0.5)',
+		  borderColor: 'rgba(54, 162, 235, 1)',
+		  borderWidth: 1
+		}]
+	  },
+	  options: {
+		scales: {
+		  y: {
+			beginAtZero: true
+		  },
+		  x: {
+			ticks: {
+			  maxRotation: 0, // Set the rotation to 0 degrees
+			  autoSkip: false, // Disable automatic skipping of labels
+			  maxTicksLimit: 10 // Adjust the maximum number of ticks to display
+			}
+		  }
+		},
+		indexAxis: 'x', // Set the index axis to 'x' for horizontal bar chart
+		barThickness: 20 // Adjust the bar thickness (remove quotation marks for a numerical value)
+	  }
+	});
+  </script>
+  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+ 
+
+  <canvas id="barChart"></canvas>
+
+  <script>
+    var xValues = [{% for data in data %}'{{ data.date }}',{% endfor %}];
+    var yValues = [{% for data in data %}{{ data.clicks }},{% endfor %}];
+    var barColors = ["red", "green", "blue", "orange", "brown"];
+
+    new Chart("barChart", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Adword Data"
+        }
+      }
+    });
+  </script> {% endcomment %}
+  <script src="../static/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+   
+  <div id="myPlot" style="width:100%;max-width:700px"></div>
+
+<script>
+	const xArray = [{% for data in data %}'{{ data.cost }}',{% endfor %}];
+	const yArray = [{% for data in data %}{{ data.clicks }},{% endfor %}];
+	
+	// Define Data
+	const data = [{
+	  x: xArray,
+	  y: yArray,
+	  type: "lines", // Use "bar" type for a bar chart
+	  marker: {
+	    color: "blue" // Customize the bar color
+	  },
+	  hovertemplate: '<b>%{y}</b><extra></extra>' // Add hover template for interactivity
+	}];
+	
+	// Define Layout
+	const layout = {
+	  xaxis: { title: "Cost" }, // Customize x-axis title
+	  yaxis: { title: "Clicks" }, // Customize y-axis title
+	  title: "Bar Chart", // Customize chart title
+	  bargap: 10, // Adjust the bar gap (0.2 represents 20% gap between bars)
+	  hovermode: "closest" // Set hovermode to "closest" for better interactivity
+	};
+	
+	// Display using Plotly
+	Plotly.newPlot("myPlot", data, layout);
+</script>
+{% endblock content %}
