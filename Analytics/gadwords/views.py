@@ -1,5 +1,5 @@
-from datetime import datetime
-from django.http import JsonResponse
+from datetime import date, datetime
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import UploadFileForm
 
@@ -12,6 +12,7 @@ from io import TextIOWrapper
 from django.db.models import Count
 import pandas as pd
 from django.core.paginator import Paginator
+from django.template import loader
 
 def ad_page(request):
     if request.method == 'POST':
@@ -106,8 +107,21 @@ def ad_page(request):
         return redirect('ad_page')
 
     else:
-        ad_data = DailyStats.objects.all().order_by('-id')[:10]
-        return render(request, 'ad_page.html', {'ad_data': ad_data})
+        all_ad_data = DailyStats.objects.all().order_by('id')
+
+        # Set the number of items per page
+        items_per_page = 10
+
+        # Create a Paginator object
+        paginator = Paginator(all_ad_data, items_per_page)
+
+        # Get the current page number from the request's GET parameters
+        page_number = request.GET.get('page')
+
+        # Get the Page object for the requested page number
+        page = paginator.get_page(page_number)
+
+        return render(request, 'ad_page.html', {'ad_data': page})
 
 def ad_data_list(request):
     ad_data = DailyStats.objects.all()
@@ -169,46 +183,70 @@ from django.db.models import Sum, Avg
 #     return render(request, 'Adword_Dashboard.html', context)
 
 
-def ad_page(request):
-    # Fetch all ad_data objects
-    all_ad_data = DailyStats.objects.all()
+# def ad_page(request):
+#     # Fetch all ad_data objects
+#     all_ad_data = DailyStats.objects.all()
 
-    # Set the number of items per page
-    items_per_page = 10
+#     # Set the number of items per page
+#     items_per_page = 10
 
-    # Create a Paginator object
-    paginator = Paginator(all_ad_data, items_per_page)
+#     # Create a Paginator object
+#     paginator = Paginator(all_ad_data, items_per_page)
 
-    # Get the current page number from the request's GET parameters
-    page_number = request.GET.get('page')
+#     # Get the current page number from the request's GET parameters
+#     page_number = request.GET.get('page')
 
-    # Get the Page object for the requested page number
-    page = paginator.get_page(page_number)
+#     # Get the Page object for the requested page number
+#     page = paginator.get_page(page_number)
 
-    return render(request, 'ad_page.html', {'ad_data': page})
+#     return render(request, 'ad_page.html', {'ad_data': page})
 
-def AdDashboard(request):
+# def AdDashboard(request):
+#     data = DailyStats.objects.all()
+
+#     total_click = None
+#     total_cost = None
+#     total_conversion = None
+#     total_cpc = None
+
+#     if data:
+#         total_click = DailyStats.objects.aggregate(total_click=Sum('clicks'))
+#         total_cost = DailyStats.objects.aggregate(total_cost=Sum('cost'))
+#         total_conversion = DailyStats.objects.aggregate(total_conversion=Sum('conversions'))
+#         total_cpc = DailyStats.objects.aggregate(total_cpc=Avg('cost_per_conversion'))
+
+#     context = {
+#         'data': data,
+#         'total_click': total_click['total_click'] if total_click else None,
+#         'total_cost': total_cost['total_cost'] if total_cost else None,
+#         'total_conversion': total_conversion['total_conversion'] if total_conversion else None,
+#         'total_cpc': total_cpc['total_cpc'] if total_cpc else None
+#     }
+
+#     return render(request, 'Adword_Dashboard.html', context)
+
+def testing(request):
     data = DailyStats.objects.all()
-
-    total_click = None
-    total_cost = None
-    total_conversion = None
-    total_cpc = None
-
-    if data:
-        total_click = DailyStats.objects.aggregate(total_click=Sum('clicks'))
-        total_cost = DailyStats.objects.aggregate(total_cost=Sum('cost'))
-        total_conversion = DailyStats.objects.aggregate(total_conversion=Sum('conversions'))
-        total_cpc = DailyStats.objects.aggregate(total_cpc=Avg('cost_per_conversion'))
-
+    count = DailyStats.objects.all()
+    clicks = DailyStats.objects.all()
+    cost = DailyStats.objects.all()
+    search_word = DailyStats.objects.all()
+    cpc = DailyStats.objects.all()
+    template = loader.get_template('Adword_Dashboard.html')
+    
     context = {
-        'data': data,
-        'total_click': total_click['total_click'] if total_click else None,
-        'total_cost': total_cost['total_cost'] if total_cost else None,
-        'total_conversion': total_conversion['total_conversion'] if total_conversion else None,
-        'total_cpc': total_cpc['total_cpc'] if total_cpc else None
+        'count': count,
+        'data':data[:30],
+        'clicks':clicks,
+        'cost' : cost,
+        'search_word':search_word,
+        'cost_per_conversion':cpc,
+        'search_word': search_word,
+        
     }
-
-    return render(request, 'Adword_Dashboard.html', context)
+    return HttpResponse(template.render(context,request))
+ 
+ 
+ 
  
 

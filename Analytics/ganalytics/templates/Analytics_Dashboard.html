@@ -1,6 +1,7 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% block content %}
+<script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
 <div class="row">
     <!-- BEGIN daterange-filter -->
     <div class="d-sm-flex align-items-center mb-3">
@@ -115,7 +116,48 @@
        <canvas id="myChart" width="400" height="100"></canvas>
     </div>
 </div>
- 
+<div class="panel panel-inverse" data-sortable-id="index-1">
+  <div class="panel-heading">
+      <h4 class="panel-title">Website Analytics (Last 7 Days)</h4>
+      <div class="panel-heading-btn">
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+      </div>
+  </div>
+  <div class="panel-body pe-1">
+     <canvas id="mChart" width="400" height="100"></canvas>
+  </div>
+</div>
+<div class="panel panel-inverse" data-sortable-id="index-1">
+  <div class="panel-heading">
+      <h4 class="panel-title">Website Analytics (Last 7 Days)</h4>
+      <div class="panel-heading-btn">
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+          <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+      </div>
+  </div>
+  <div class="panel-body pe-1">
+     <canvas id="nChart" width="400" height="100"></canvas>
+  </div>
+</div>
+<div class="panel panel-inverse" data-sortable-id="index-1">
+    <div class="panel-heading">
+        <h4 class="panel-title">Website Analytics (Last 7 Days)</h4>
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+        </div>
+    </div>
+    <div class="panel-body pe-1">
+       <canvas id="deviceChart" width="400" height="100"></canvas>
+    </div>
+  </div>
 <!-- END panel -->
 </div>
 <!-- END #content -->
@@ -135,11 +177,11 @@
 	const ctx = document.getElementById('myChart');
   
 	new Chart(ctx, {
-	  type: 'line',
+	  type: 'bar',
 	  data: {
-		labels: [{% for data in data %}'{{ data.day_users }}',{% endfor %}],
+		labels: [{% for data in data %}'{{ data.day_index }}',{% endfor %}],
 		datasets: [{
-		  label: 'Day ses',
+		  label: 'Day vs sessions',
 		  data: [{% for data in data %}{{ data.day_sessions }},{% endfor %}],
 		  backgroundColor: 'rgba(54, 162, 235, 0.5)',
 		  borderColor: 'rgba(54, 162, 235, 1)',
@@ -164,5 +206,160 @@
 	  }
 	});
   </script>
+  <script>
+    // Static data for the chart
+    var labels2 = [{% for data in data %}'{{ data.browser }}',{% endfor %}];
+    var dataset1 = [{% for data in data %}{{ data.browser_users }},{% endfor %}];
+    var dataset2 = [{% for data in data %}{{ data.browser_new_users }},{% endfor %}];
 
+    // Create the chart
+    var ctx2 = document.getElementById('mChart').getContext('2d');
+    var myChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: labels2,
+            datasets: [
+                {
+                    label: 'browser_users',
+                    data: dataset1,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 3,
+                    yAxisID: 'y-axis-1'
+                },
+                {
+                    label: 'browser_new_users',
+                    data: dataset2,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 3,
+                    yAxisID: 'y-axis-2'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: [
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1'
+                    },
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-2'
+                    }
+                ]
+            }
+        }
+    });
+</script>
+<script>
+  // Static data for the chart
+  var labels2 = [{% for data in data %}'{{ data.default_channel_grouping }}',{% endfor %}];
+  var dataset1 = [{% for data in data %}{{ data.default_sessions }},{% endfor %}];
+  var dataset2 = [{% for data in data %}{{ data.default_new_users }},{% endfor %}];
+
+  // Create the chart
+  var ctx2 = document.getElementById('nChart').getContext('2d');
+  var myChart2 = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+          labels: labels2,
+          datasets: [
+              {
+                  label: 'default_sessions',
+                  data: dataset1,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 3,
+                  yAxisID: 'y-axis-1'
+              },
+              {
+                  label: 'default_new_users',
+                  data: dataset2,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 3,
+                  yAxisID: 'y-axis-2'
+              }
+          ]
+      },
+      options: {
+          responsive: true,
+          scales: {
+              y: [
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'left',
+                      id: 'y-axis-1'
+                  },
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'right',
+                      id: 'y-axis-2'
+                  }
+              ]
+          }
+      }
+  });
+</script>
+<script>
+    // Static data for the chart
+    var labels2 = [{% for data in data %}'{{ data.day_index }}',{% endfor %}];
+    var dataset1 = [{% for data in data %}{{ data.day_users }},{% endfor %}];
+    var dataset2 = [{% for data in data %}{{ data.day_sessions }},{% endfor %}];
+  
+    // Create the chart
+    var ctx2 = document.getElementById('deviceChart').getContext('2d');
+    var myChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: labels2,
+            datasets: [
+                {
+                    label: 'day_users',
+                    data: dataset1,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 3,
+                    yAxisID: 'y-axis-1'
+                },
+                {
+                    label: 'day_sessions',
+                    data: dataset2,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 3,
+                    yAxisID: 'y-axis-2'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: [
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1'
+                    },
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-2'
+                    }
+                ]
+            }
+        }
+    });
+  </script>
 {% endblock content %}

@@ -1,6 +1,7 @@
 {% extends 'Artist Booking.html' %}
 {% load static %}
 {% block content %}
+<script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
 <div class="row">
     <!-- BEGIN daterange-filter -->
     <div class="d-sm-flex align-items-center mb-3">
@@ -98,10 +99,23 @@
             </div>
         </div>
         <div class="panel-body pe-1">
-           <canvas id="myChart" width="400" height="100"></canvas>
+           <canvas id="mChart" width="400" height="100"></canvas>
         </div>
     </div>
-     
+    <div class="panel panel-inverse" data-sortable-id="index-1">
+      <div class="panel-heading">
+          <h4 class="panel-title">Website Analytics (Last 7 Days)</h4>
+          <div class="panel-heading-btn">
+              <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+              <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+              <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+              <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+          </div>
+      </div>
+      <div class="panel-body pe-1">
+         <canvas id="myChart" width="400" height="100"></canvas>
+      </div>
+  </div>
     <!-- END panel -->
     </div>
     <!-- END #content -->
@@ -118,7 +132,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       
       <script>
-        const ctx = document.getElementById('myChart');
+        const ctx = document.getElementById('mChart');
       
         new Chart(ctx, {
           type: 'bar',
@@ -150,4 +164,89 @@
           }
         });
       </script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% comment %} <script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for data in data %}'{{ data.time }}',{% endfor %}],
+            datasets: [{
+                label: 'status',
+                data: [{% for data in data %}{{ data.net_amount }},{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        maxRotation: 0,
+                        autoSkip: false,
+                        maxTicksLimit: 10
+                    }
+                }
+            },
+            indexAxis: 'x',
+            barThickness: 20
+        }
+    }); {% endcomment %}
+<script>
+    // Static data for the chart
+    var labels2 = ['January', 'February', 'March', 'April', 'May','Jun','July','Aug','Sep','Oct','Nav','Dec'];
+    var dataset1 = [{% for data in data %}{{ data.net_amount }},{% endfor %}];
+    var dataset2 = [28, 48, 40, 19, 86];
+
+    // Create the chart
+    var ctx2 = document.getElementById('myChart').getContext('2d');
+    var myChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: labels2,
+            datasets: [
+                {
+                    label: 'Dataset 1',
+                    data: dataset1,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y-axis-1'
+                },
+                {
+                    label: 'Dataset 2',
+                    data: dataset2,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y-axis-2'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: [
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1'
+                    },
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-2'
+                    }
+                ]
+            }
+        }
+    });
+</script>
 {% endblock content %}

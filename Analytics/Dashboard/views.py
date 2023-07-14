@@ -107,11 +107,15 @@ def date_range_view(request):
     previous_start_date = start_date - timedelta(days=30)
     previous_end_date = start_date - timedelta(days=1)
 
+    # Create a range of years from 2000 to 2050
+    year_range = range(2000, 2051)
+
     context = {
         'start_date': start_date.date(),
         'end_date': end_date.date(),
         'previous_start_date': previous_start_date.date(),
         'previous_end_date': previous_end_date.date(),
+        'year_range': year_range,
     }
 
-    return render(request, 'date_range.html', context)
+    return render(request, 'dashboard.html', context)

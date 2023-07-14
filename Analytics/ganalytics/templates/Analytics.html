@@ -10,7 +10,7 @@
             {% csrf_token %}
             <input type="file" name="myfile">
             <input type="submit" value="Upload">
-          </form>
+        </form>
     </div>
     <h1 class="page-header"> <small></small></h1>
 			<!-- END page-header -->
@@ -19,10 +19,10 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">Analytics Data</h4>
                     <div class="dropdown me-2">
-        <button class="btn btn-white btn-sm" data-bs-toggle="dropdown">
+        {% comment %} <button class="btn btn-white btn-sm" data-bs-toggle="dropdown">
             show <span class="caret ms-3px"></span>
-        </button>
-        <div class="dropdown-menu">
+        </button> {% endcomment %}
+        {% comment %} <div class="dropdown-menu">
             <a href="/your_view_url/?quantity=all" class="dropdown-item">
                 <i class="fa fa-circle fs-9px fa-fw me-2"></i> All
             </a>
@@ -33,7 +33,7 @@
                 <i class="fa fa-circle fs-9px fa-fw me-2 text-blue"></i> 20
             </a>
             <!-- Add other options as needed -->
-        </div>
+        </div> {% endcomment %}
     </div>
                     <div class="panel-heading-btn">
                         <div class="panel-heading-btn">
@@ -136,12 +136,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for row in ad_data %}
+                            {% for row in data %}
                             <tr>
                                 <td>
                                     <input type="checkbox" name="delete" value="{{ row.id }}">
                                 </td>
-                                <td>{{ ad_data.start_index|add:forloop.counter0 }}</td> <!-- Index number -->
+                                <td>{{ data.start_index|add:forloop.counter0 }}</td> <!-- Index number -->
                                 <td>{{ row.default_channel_grouping }}</td>
                                 <td>{{ row.default_sessions }}</td>
                                 <td>{{ row.default_new_users }}</td>
@@ -234,15 +234,15 @@
        
             <div class="text-center">
                 <!-- Pagination links -->
-                {% if ad_data.has_previous %}
+                {% if data.has_previous %}
                     <a href="?page=1">First</a>
-                    <a href="?page={{ ad_data.previous_page_number }}">Previous</a>
+                    <a href="?page={{ data.previous_page_number }}">Previous</a>
                 {% endif %}
-                <span class="current-page">{{ ad_data.number }}</span> /
-                <span class="total-pages">{{ ad_data.paginator.num_pages }}</span>
-                {% if ad_data.has_next %}
-                    <a href="?page={{ ad_data.next_page_number }}">Next</a>
-                    <a href="?page={{ ad_data.paginator.num_pages }}">Last</a>
+                <span class="current-page">{{ data.number }}</span> /
+                <span class="total-pages">{{ data.paginator.num_pages }}</span>
+                {% if data.has_next %}
+                    <a href="?page={{ data.next_page_number }}">Next</a>
+                    <a href="?page={{ data.paginator.num_pages }}">Last</a>
                 {% endif %}
             </div>
         </div>

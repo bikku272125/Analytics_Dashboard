@@ -1,6 +1,7 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% block content %}
+<script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
@@ -45,7 +46,7 @@
                 <div class="stats-icon"><i class="fa fa-desktop"></i></div>
                 <div class="stats-info">
                     <h4>Total Click</h4>
-                    <p>{{ total_click }}</p>	
+                    <p>{{ clicks.count }}</p>	
                 </div>
                 <div class="stats-link">
                     <a href="{{ ad_page }}">View Details<i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -59,7 +60,7 @@
                 <div class="stats-icon"><i class="fa fa-link"></i></div>
                 <div class="stats-info">
                     <h4>Total Cost:</h4>
-                    <p>{{total_cost}}</p>	
+                    <p>{{cost.count}}</p>	
                 </div>
                 <div class="stats-link">
                     <a href="{{ ad_page }}">View Details<i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -72,8 +73,8 @@
             <div class="widget widget-stats bg-orange">
                 <div class="stats-icon"><i class="fa fa-users"></i></div>
                 <div class="stats-info">
-                    <h4>Total Conversion:</h4>
-                    <p>{{total_conversion}}</p>	
+                    <h4>Search Word:</h4>
+                    <p>{{search_word.count}}</p>	
                 </div>
                 <div class="stats-link">
                     <a href="{{ ad_page }}"> View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -87,7 +88,7 @@
                 <div class="stats-icon"><i class="fa fa-clock"></i></div>
                 <div class="stats-info">
                     <h4>CPC</h4>
-                    <p>{{ total_cpc }}</p>	
+                    <p>{{ cost_per_conversion.count }}</p>	
                 </div>
                 <div class="stats-link">
                     <a href="{{ ad_page }}">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -103,7 +104,7 @@
                 <!-- BEGIN panel -->
                 <div class="panel panel-inverse">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Bar Chart</h4>
+                        <h4 class="panel-title">Adword Chart</h4>
                         <div class="panel-heading-btn">
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
                             <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -112,15 +113,15 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <canvas id="myChart" width="400" height="100"></canvas>
+                        <canvas id="mChart" width="400" height="100"></canvas>
         </div> 
 				</div>
-    <div class="col-6">				
+    			
 	
 		<!-- BEGIN panel -->
 		<div class="panel panel-inverse">
 			<div class="panel-heading">
-				<h4 class="panel-title"> Chart</h4>
+				<h4 class="panel-title">Search Word</h4>
 				<div class="panel-heading-btn">
 					<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 					<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -129,15 +130,15 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<div id="myPlot" style="width:100%;max-width:500px">
+				<canvas id="myChart" width="400" height="100"></canvas>
 
 			</div>	
         </div>
     </div>
-	<div class="row-4">
+	<div class="col-12">
 		<div class="panel panel-inverse">
 			<div class="panel-heading">
-				<h4 class="panel-title"> Chart</h4>
+				<h4 class="panel-title">campaign Chart</h4>
 				<div class="panel-heading-btn">
 					<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 					<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -146,11 +147,49 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<div id="myPlot" style="width:100%;max-width:500px">
+				<canvas id="campaignChart"width="400" height="100"></canvas>
 
 			</div>	
         </div>
-	</div>
+	
+</div>
+<div>
+  <div class="panel panel-inverse">
+    <div class="panel-heading">
+      <h4 class="panel-title"> campaign Chart</h4>
+      <div class="panel-heading-btn">
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+      </div>
+    </div>
+    <div class="panel-body">
+      <canvas id="campaign Chart" width="400" height="100"></canvas>
+
+    </div>	
+      </div>
+
+</div>
+</div>
+<div>
+  <div class="panel panel-inverse">
+    <div class="panel-heading">
+      <h4 class="panel-title"> Per_day Chart</h4>
+      <div class="panel-heading-btn">
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-warning" data-toggle="panel-collapse"><i class="fa fa-minus"></i></a>
+        <a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
+      </div>
+    </div>
+    <div class="panel-body">
+      <canvas id="Gender Chart" width="400" height="100"></canvas>
+
+    </div>	
+      </div>
+
+</div>
 </div>
 <div>
 
@@ -162,13 +201,13 @@
 	<script src="../static/js/app.min.js"></script>  {% endcomment %}
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
   
-  <script>
+  {% comment %} <script>
 	const ctx = document.getElementById('myChart');
   
 	new Chart(ctx, {
 	  type: 'line',
 	  data: {
-		labels: [{% for data in data %}'{{ data.cost }}',{% endfor %}],
+		labels: [{% for data in data %}'{{ data.date }}',{% endfor %}],
 		datasets: [{
 		  label: 'Sum of Clicks',
 		  data: [{% for data in data %}{{ data.clicks }},{% endfor %}],
@@ -195,63 +234,316 @@
 	  }
 	});
   </script>
-  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
- 
+  <script src="../static/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script> {% endcomment %}
 
-  <canvas id="barChart"></canvas>
+{% comment %} <script>
+  var xArray = ['January', 'February', 'March', 'April', 'May', 'June'];
+  var yArray1 = [100, 200, 150, 300, 250, 180];
+  var yArray2 = [50, 150, 100, 200, 180, 120];
 
-  <script>
-    var xValues = [{% for data in data %}'{{ data.date }}',{% endfor %}];
-    var yValues = [{% for data in data %}{{ data.clicks }},{% endfor %}];
-    var barColors = ["red", "green", "blue", "orange", "brown"];
-
-    new Chart("barChart", {
-      type: "bar",
+  var ctx = document.getElementById('AdChart').getContext('2d');
+  var chart = new Chart(ctx, {
+      type: 'bar',
       data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor: barColors,
-          data: yValues
-        }]
+          labels: xArray,
+          datasets: [{
+              label: 'Data 1',
+              data: yArray1,
+              yAxisID: 'y-axis-1',
+              backgroundColor: 'rgba(54, 162, 235, 0.5)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+          }, {
+              label: 'Data 2',
+              data: yArray2,
+              yAxisID: 'y-axis-2',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1
+          }]
       },
       options: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: "Adword Data"
-        }
+          scales: {
+              yAxes: [{
+                  id: 'y-axis-1',
+                  type: 'linear',
+                  position: 'left',
+                  scaleLabel: {
+                      display: true,
+                      labelString: 'Data 1'
+                  }
+              }, {
+                  id: 'y-axis-2',
+                  type: 'linear',
+                  position: 'right',
+                  scaleLabel: {
+                      display: true,
+                      labelString: 'Data 2'
+                  }
+              }]
+          }
       }
-    });
-  </script> {% endcomment %}
-  <script src="../static/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
-   
-  <div id="myPlot" style="width:100%;max-width:700px"></div>
-
+  });
+</script> {% endcomment %}
 <script>
-	const xArray = [{% for data in data %}'{{ data.cost }}',{% endfor %}];
-	const yArray = [{% for data in data %}{{ data.clicks }},{% endfor %}];
-	
-	// Define Data
-	const data = [{
-	  x: xArray,
-	  y: yArray,
-	  type: "lines", // Use "bar" type for a bar chart
-	  marker: {
-	    color: "blue" // Customize the bar color
-	  },
-	  hovertemplate: '<b>%{y}</b><extra></extra>' // Add hover template for interactivity
-	}];
-	
-	// Define Layout
-	const layout = {
-	  xaxis: { title: "Cost" }, // Customize x-axis title
-	  yaxis: { title: "Clicks" }, // Customize y-axis title
-	  title: "Bar Chart", // Customize chart title
-	  bargap: 10, // Adjust the bar gap (0.2 represents 20% gap between bars)
-	  hovermode: "closest" // Set hovermode to "closest" for better interactivity
-	};
-	
-	// Display using Plotly
-	Plotly.newPlot("myPlot", data, layout);
+  // Static data for the chart
+  var labels2 = [{% for data in data %}'{{ data.date }}',{% endfor %}];
+  var dataset1 = [{% for data in data %}{{ data.clicks }},{% endfor %}];
+  var dataset2 = [{% for data in data %}{{data.conversions }},{% endfor %}];
+
+  // Create the chart
+  var ctx2 = document.getElementById('mChart').getContext('2d');
+  var myChart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+          labels: labels2,
+          datasets: [
+              {
+                  label: 'clicks',
+                  data: dataset1,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-1'
+              },
+              {
+                  label: 'conversions',
+                  data: dataset2,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-2'
+              }
+          ]
+      },
+      options: {
+          responsive: true,
+          scales: {
+              y: [
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'left',
+                      id: 'y-axis-1'
+                  },
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'right',
+                      id: 'y-axis-2'
+                  }
+              ]
+          }
+      }
+  });
 </script>
+<script>
+  // Static data for the chart
+  var labels2 = [{% for data in data %}'{{ data.search_word }}',{% endfor %}];
+  var dataset1 = [{% for data in data %}{{ data.search_word_clicks }},{% endfor %}];
+  var dataset2 = [{% for data in data %}{{data.search_word_impressions }},{% endfor %}];
+
+  // Create the chart
+  var ctx2 = document.getElementById('myChart').getContext('2d');
+  var myChart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+          labels: labels2,
+          datasets: [
+              {
+                  label: 'clicks',
+                  data: dataset1,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-1'
+              },
+              {
+                  label: 'Impression',
+                  data: dataset2,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-2'
+              }
+          ]
+      },
+      options: {
+          responsive: true,
+          scales: {
+              y: [
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'left',
+                      id: 'y-axis-1'
+                  },
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'right',
+                      id: 'y-axis-2'
+                  }
+              ]
+          }
+      }
+  });
+</script>
+<script>
+  // Static data for the chart
+  var labels2 = [{% for data in data %}'{{ data.network_name}}',{% endfor %}];
+  var dataset1 = [{% for data in data %}{{ data.network_clicks }},{% endfor %}];
+  var dataset2 = [{% for data in data %}{{data.network_cost }},{% endfor %}];
+
+  // Create the chart
+  var ctx2 = document.getElementById('campaignChart').getContext('2d');
+  var myChart2 = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+          labels: labels2,
+          datasets: [
+              {
+                  label: 'network_clicks',
+                  data: dataset1,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-1'
+              },
+              {
+                  label: 'network_cost',
+                  data: dataset2,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-2'
+              }
+          ]
+      },
+      options: {
+          responsive: true,
+          scales: {
+              y: [
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'left',
+                      id: 'y-axis-1'
+                  },
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'right',
+                      id: 'y-axis-2'
+                  }
+              ]
+          }
+      }
+  });
+</script>
+<script>
+  // Static data for the chart
+  var labels2 = [{% for data in data %}'{{ data.device_name}}',{% endfor %}];
+  var dataset1 = [{% for data in data %}{{ data.device_clicks}},{% endfor %}];
+  var dataset2 = [{% for data in data %}{{data.device_cost }},{% endfor %}];
+
+  // Create the chart
+  var ctx2 = document.getElementById('campaign Chart').getContext('2d');
+  var myChart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+          labels: labels2,
+          datasets: [
+              {
+                  label: 'device_clicks',
+                  data: dataset1,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-1'
+              },
+              {
+                  label: 'device_cost',
+                  data: dataset2,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-2'
+              }
+          ]
+      },
+      options: {
+          responsive: true,
+          scales: {
+              y: [
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'left',
+                      id: 'y-axis-1'
+                  },
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'right',
+                      id: 'y-axis-2'
+                  }
+              ]
+          }
+      }
+  });
+</script>
+<script>
+  // Static data for the chart
+  var labels2 = [{% for data in data %}'{{ data.per_hour }}',{% endfor %}];
+  var dataset1 = [{% for data in data %}{{ data.per_hour_impression}},{% endfor %}];
+  var dataset2 = [{% for data in data %}{{data.per_day_per_hour_impression }},{% endfor %}];
+
+  // Create the chart
+  var ctx2 = document.getElementById('Gender Chart').getContext('2d');
+  var myChart2 = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+          labels: labels2,
+          datasets: [
+              {
+                  label: 'per_hour_impression',
+                  data: dataset1,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-1'
+              },
+              {
+                  label: 'per_day_per_hour_impression',
+                  data: dataset2,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 2,
+                  yAxisID: 'y-axis-2'
+              }
+          ]
+      },
+      options: {
+          responsive: true,
+          scales: {
+              y: [
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'left',
+                      id: 'y-axis-1'
+                  },
+                  {
+                      type: 'linear',
+                      display: true,
+                      position: 'right',
+                      id: 'y-axis-2'
+                  }
+              ]
+          }
+      }
+  });
+</script>
+
 {% endblock content %}
